@@ -1,1 +1,9 @@
+fastapi
 uvicorn==0.22.0
+pandas
+numpy
+faiss-cpu
+tqdm
+openai==0.28
+python-dotenv
+watchdog
