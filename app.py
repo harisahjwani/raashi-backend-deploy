@@ -1,5 +1,4 @@
-﻿@"
-import os
+﻿import os
 import pandas as pd
 import numpy as np
 import faiss
@@ -47,7 +46,7 @@ async def ingest(file: UploadFile = File(...), authorization: str = Header(None)
     elif file.filename.endswith(".csv"):
         df = pd.read_csv(file.file)
     else:
-        raise HTTPException(status_code=400, detail="Unsupported file")
+        raise HTTPException(status_code=400, detail="Unsupported file type")
 
     questions = df.iloc[:, 0].astype(str).tolist()
     embeddings = []
@@ -59,10 +58,8 @@ async def ingest(file: UploadFile = File(...), authorization: str = Header(None)
         )
         embeddings.append(response.data[0].embedding)
 
-    global documents
+    global documents, index
     documents = questions
-
-    global index
     index = faiss.IndexFlatL2(embedding_dim)
     index.add(np.array(embeddings).astype("float32"))
 
@@ -86,4 +83,3 @@ async def query(data: QueryRequest, authorization: str = Header(None)):
     best_match = documents[indices[0][0]]
 
     return {"question": best_match, "distance": float(distances[0][0])}
-"@ | Set-Content -Path "D:\raashi-backend-deploy\app.py" -Encoding UTF8
