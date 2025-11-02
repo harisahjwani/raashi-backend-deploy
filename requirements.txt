@@ -7,3 +7,4 @@ tqdm
 openai==0.28
 python-dotenv
 watchdog
+python-multipart
